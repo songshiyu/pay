@@ -1,5 +1,6 @@
 package com.song.pay.service.impl;
 
+import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.song.pay.PayApplicationTests;
 import com.song.pay.service.IPayService;
 import org.junit.Test;
@@ -21,6 +22,6 @@ public class PayServiceImplTest extends PayApplicationTests {
     public void create(){
         //BigDecimal.valueOf(0.01) ==> 等同于 new BigDecimal("0.01")
         //千万不能用new BigDecimal(0.01) 精度会出问题
-        payService.create("123456789song", BigDecimal.valueOf(0.01));
+        payService.create("123456789song", BigDecimal.valueOf(0.01), BestPayTypeEnum.WXPAY_NATIVE);
     }
 }

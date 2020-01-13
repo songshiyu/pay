@@ -1,5 +1,6 @@
 package com.song.pay.controller;
 
+import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.song.pay.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,22 @@ public class PayController {
 
     @GetMapping("/create")
     public ModelAndView create(@RequestParam("orderId") String orderId,
-                               @RequestParam("amount") BigDecimal amount){
-        Map map = new HashMap();
-        PayResponse response = payService.create(orderId, amount);
-        map.put("codeUrl",response.getCodeUrl());
-        return new ModelAndView("create",map);
+                               @RequestParam("amount") BigDecimal amount,
+                               @RequestParam("payType")BestPayTypeEnum bestPayTypeEnum){
+        Map<String ,String> map = new HashMap<>();
+        PayResponse response = payService.create(orderId, amount,bestPayTypeEnum);
+
+        //支付方式不同，渲染方式就不同，WEIXIN_NATIVE使用codeUrl
+        //支付宝使用body
+        if(bestPayTypeEnum == BestPayTypeEnum.WXPAY_NATIVE){
+            map.put("codeUrl",response.getCodeUrl());
+            return new ModelAndView("createForWxNative",map);
+        }else if (bestPayTypeEnum == BestPayTypeEnum.ALIPAY_PC){
+            map.put("body",response.getBody());
+            return new ModelAndView("createForAlipay",map);
+        }
+
+        throw new RuntimeException("暂不支持的支付方式");
     }
 
     @PostMapping("/notify")
