@@ -46,6 +46,7 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/cn.springboot/best-pay-sdk -->
+		<!-- 后期要把这个sdk更改成自己的 -->
 		<dependency>
 			<groupId>cn.springboot</groupId>
 			<artifactId>best-pay-sdk</artifactId>
