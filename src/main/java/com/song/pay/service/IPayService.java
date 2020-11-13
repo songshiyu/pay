@@ -14,4 +14,9 @@ public interface IPayService {
      * 创建/发起支付
      */
     PayResponse create(String orderId, BigDecimal amount);
+
+    /**
+     * 接收异步通知
+     */
+    void asyncNotify(String asyncNotify);
 }

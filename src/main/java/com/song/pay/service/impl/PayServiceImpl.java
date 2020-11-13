@@ -1,11 +1,12 @@
 package com.song.pay.service.impl;
 
-import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
-import com.lly835.bestpay.service.impl.BestPayServiceImpl;
+import com.lly835.bestpay.service.BestPayService;
 import com.song.pay.service.IPayService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,19 +16,14 @@ import java.math.BigDecimal;
  * @create: 2020/11/11 08:28:44
  **/
 @Service
+@Slf4j
 public class PayServiceImpl implements IPayService {
+
+    @Autowired
+    private BestPayService bestPayService;
 
     @Override
     public PayResponse create(String orderId, BigDecimal amount) {
-
-        WxPayConfig wxPayConfig = new WxPayConfig();
-        wxPayConfig.setAppId("wxd898fcb01713c658");
-        wxPayConfig.setMchId("1483469312");
-        wxPayConfig.setMchKey("098F6BCD4621D373CADE4E832627B4F6");
-        wxPayConfig.setNotifyUrl("http://www.baidu.com");
-
-        BestPayServiceImpl bestPayService = new BestPayServiceImpl();
-        bestPayService.setWxPayConfig(wxPayConfig);
 
         PayRequest payRequest = new PayRequest();
         payRequest.setOrderId(orderId);
@@ -37,5 +33,11 @@ public class PayServiceImpl implements IPayService {
 
         PayResponse payResponse = bestPayService.pay(payRequest);
         return payResponse;
+    }
+
+    @Override
+    public void asyncNotify(String asyncNotify) {
+        PayResponse payResponse = bestPayService.asyncNotify(asyncNotify);
+        log.info("payResponse={}", payResponse);
     }
 }
